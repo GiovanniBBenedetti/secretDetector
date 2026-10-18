@@ -2,12 +2,39 @@ import * as path from "path";
 import * as fs from "fs";
 import { scanFile, scanDirectory } from "./scanner";
 import { printHeader, printFindings, printSummary } from "./reporter";
+import { isGitRepo, scanStagedFiles } from "./git";
+import { installHook, uninstallHook } from "./hooks";
 
-const rawTarget = process.argv[2];
+const args = process.argv.slice(2);
+
+if (args.includes("--install-hook")) {
+  installHook();
+  process.exit(0);
+}
+
+if (args.includes("--uninstall-hook")) {
+  uninstallHook();
+  process.exit(0);
+}
+
+if (args.includes("--staged")) {
+  if (!isGitRepo()) {
+    console.error("Erro: não é um repositório git.");
+    process.exit(1);
+  }
+  printHeader("staged changes (git)");
+  const findings = scanStagedFiles();
+  printFindings(findings);
+  printSummary(findings);
+}
+
+const rawTarget = args[0];
 
 if (!rawTarget) {
   console.error("Uso: npm run scan -- <arquivo-ou-diretório>");
-  console.error("Exemplo: npm run scan -- ./src");
+  console.error("     npm run scan -- --staged");
+  console.error("     npm run scan -- --install-hook");
+  console.error("     npm run scan -- --uninstall-hook");
   process.exit(1);
 }
 
