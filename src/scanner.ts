@@ -36,6 +36,17 @@ function shouldScanFile(filePath: string): boolean {
   return ALLOWED_EXTENSIONS.has(ext);
 }
 
+function matchesIgnorePattern(filePath: string, patterns: string[]): boolean {
+  if (patterns.length === 0) return false;
+  const normalized = filePath.replace(/\\/g, "/");
+  return patterns.some(pattern => {
+    const p = pattern.replace(/\\/g, "/");
+    if (p.startsWith("*.")) return normalized.endsWith(p.slice(1));
+    if (p.endsWith("/**")) return normalized.includes(p.slice(0, -3) + "/");
+    return normalized.includes(p);
+  });
+}
+
 export function scanFile(filePath: string): Finding[] {
   const findings: Finding[] = [];
 
@@ -69,7 +80,7 @@ export function scanFile(filePath: string): Finding[] {
   return findings;
 }
 
-export function scanDirectory(dirPath: string): Finding[] {
+export function scanDirectory(dirPath: string, ignorePatterns: string[] = []): Finding[] {
   const findings: Finding[] = [];
 
   let entries: fs.Dirent[];
@@ -84,8 +95,10 @@ export function scanDirectory(dirPath: string): Finding[] {
 
     if (entry.isDirectory()) {
       if (IGNORED_DIRS.has(entry.name)) continue;
-      findings.push(...scanDirectory(fullPath));
+      if (matchesIgnorePattern(fullPath, ignorePatterns)) continue;
+      findings.push(...scanDirectory(fullPath, ignorePatterns));
     } else if (entry.isFile() && shouldScanFile(fullPath)) {
+      if (matchesIgnorePattern(fullPath, ignorePatterns)) continue;
       findings.push(...scanFile(fullPath));
     }
   }
