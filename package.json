@@ -1,23 +1,32 @@
 {
   "name": "secret-detector",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A tool to detect secrets and sensitive credentials in source code",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
-    "scan": "ts-node src/index.ts",
-    "scan:staged": "ts-node src/index.ts --staged",
-    "hook:install": "ts-node src/index.ts --install-hook",
-    "hook:uninstall": "ts-node src/index.ts --uninstall-hook"
+    "scan": "ts-node src/index.ts scan",
+    "scan:staged": "ts-node src/index.ts scan --staged",
+    "hook:install": "ts-node src/index.ts hook install",
+    "hook:uninstall": "ts-node src/index.ts hook uninstall"
   },
-  "keywords": ["security", "secrets", "credentials", "detector", "cli"],
+  "keywords": [
+    "security",
+    "secrets",
+    "credentials",
+    "detector",
+    "cli"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "ts-node": "^10.9.0"
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "commander": "^15.0.0"
   }
 }

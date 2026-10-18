@@ -23,7 +23,7 @@ function maskSecret(value: string): string {
 
 export function printHeader(targetPath: string): void {
   console.log(`\n${BOLD}╔════════════════════════════════════════╗${RESET}`);
-  console.log(`${BOLD}║       SECRET DETECTOR  v2.0.0          ║${RESET}`);
+  console.log(`${BOLD}║       SECRET DETECTOR  v3.0.0          ║${RESET}`);
   console.log(`${BOLD}╚════════════════════════════════════════╝${RESET}`);
   console.log(`${GRAY}  Target: ${CYAN}${targetPath}${RESET}\n`);
 }
