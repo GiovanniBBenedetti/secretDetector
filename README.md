@@ -1,25 +1,25 @@
 # Secret Detector
 
-A CLI tool written in TypeScript that scans source code for hardcoded secrets and credentials before they reach version control.
+Ferramenta de linha de comando escrita em TypeScript que escaneia o código-fonte em busca de segredos e credenciais expostos antes que cheguem ao controle de versão.
 
-## What it detects
+## O que detecta
 
-| Pattern | Severity |
+| Padrão | Severidade |
 |---|---|
 | AWS Access Key ID / Secret Access Key | HIGH |
 | GCP API Key / Service Account | HIGH |
 | Azure Storage Key / Connection String | HIGH |
 | JWT Token | MEDIUM |
 | Bearer Token | MEDIUM |
-| Generic API Key / Secret | MEDIUM |
-| Hardcoded Password | LOW |
+| API Key / Secret genérico | MEDIUM |
+| Senha hardcoded | LOW |
 
-## Requirements
+## Requisitos
 
 - Node.js 18+
 - npm
 
-## Installation
+## Instalação
 
 ```bash
 git clone https://github.com/GiovanniBBenedetti/secretDetector.git
@@ -27,58 +27,58 @@ cd secretDetector
 npm install
 ```
 
-## Usage
+## Como usar
 
-**Scan a file or directory**
+**Escanear um arquivo ou diretório**
 ```bash
 npm run scan -- ./src
 npm run scan -- ./src/index.ts
 ```
 
-**Scan staged files (git)**
+**Escanear arquivos em stage (git)**
 ```bash
 npm run scan:staged
 ```
-Scans only the files currently staged for commit.
+Escaneia apenas os arquivos que estão prontos para commit.
 
 **Pre-commit hook**
 ```bash
-# Install — runs automatically on every git commit
+# Instalar — executa automaticamente a cada git commit
 npm run hook:install
 
-# Uninstall
+# Remover
 npm run hook:uninstall
 ```
-Once installed, the hook runs `scan:staged` before each commit and blocks it if any secret is found.
+Após instalado, o hook escaneia os arquivos em stage antes de cada commit e bloqueia caso encontre algum segredo.
 
-## Output example
+## Exemplo de saída
 
 ```
 [HIGH] AWS Access Key ID
-  Line 12: const awsKeyId = "AKIA**********************"
-  Description: AWS Access Key ID — permite acesso à conta AWS
+  Linha 12: const awsKeyId = "AKIA**********************"
+  Descrição: AWS Access Key ID — permite acesso à conta AWS
 
---- SUMMARY ---
-  Total : 3
+--- RESUMO ---
+  Total  : 3
   HIGH   : 1
   MEDIUM : 1
   LOW    : 1
 ```
 
-Exits with code `1` if any secret is found, `0` if clean.
+Termina com código `1` se algum segredo for encontrado, `0` se estiver limpo.
 
-## Project structure
+## Estrutura do projeto
 
 ```
 src/
-  patterns.ts   # regex patterns and severity levels
-  scanner.ts    # file and directory scanning logic
-  git.ts        # staged files scanning via git show
-  hooks.ts      # pre-commit hook installer
-  reporter.ts   # terminal output formatting
-  index.ts      # CLI entry point
+  patterns.ts   # padrões regex e níveis de severidade
+  scanner.ts    # lógica de escaneamento de arquivos e diretórios
+  git.ts        # escaneamento de arquivos em stage via git show
+  hooks.ts      # instalador do pre-commit hook
+  reporter.ts   # formatação da saída no terminal
+  index.ts      # ponto de entrada da CLI
 ```
 
-## License
+## Licença
 
 MIT
